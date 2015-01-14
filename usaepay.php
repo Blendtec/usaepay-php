@@ -466,13 +466,13 @@ class umTransaction {
 				$data["UMline{$c}prodRefNum"] = $lineitem['refnum'];
 			
 			//optional level 3 data
-			if($lineitem['um']) $data["UMline{$c}um"] = $lineitem['um'];
-			if($lineitem['taxrate']) $data["UMline{$c}taxrate"] = $lineitem['taxrate'];
-			if($lineitem['taxamount']) $data["UMline{$c}taxamount"] = $lineitem['taxamount'];
-			if($lineitem['taxclass']) $data["UMline{$c}taxclass"] = $lineitem['taxclass'];
-			if($lineitem['commoditycode']) $data["UMline{$c}commoditycode"] = $lineitem['commoditycode'];
-			if($lineitem['discountrate']) $data["UMline{$c}discountrate"] = $lineitem['discountrate'];
-			if($lineitem['discountamount']) $data["UMline{$c}discountamount"] = $lineitem['discountamount'];
+			if(!empty($lineitem['um'])) $data["UMline{$c}um"] = $lineitem['um'];
+			if(!empty($lineitem['taxrate'])) $data["UMline{$c}taxrate"] = $lineitem['taxrate'];
+			if(!empty($lineitem['taxamount'])) $data["UMline{$c}taxamount"] = $lineitem['taxamount'];
+			if(!empty($lineitem['taxclass'])) $data["UMline{$c}taxclass"] = $lineitem['taxclass'];
+			if(!empty($lineitem['commoditycode'])) $data["UMline{$c}commoditycode"] = $lineitem['commoditycode'];
+			if(!empty($lineitem['discountrate'])) $data["UMline{$c}discountrate"] = $lineitem['discountrate'];
+			if(!empty($lineitem['discountamount'])) $data["UMline{$c}discountamount"] = $lineitem['discountamount'];
 			$c++;	
 		}
 				
@@ -539,6 +539,7 @@ class umTransaction {
 		$this->profiler_response=(isset($tmp["UMprofilerResponse"])?$tmp["UMprofilerResponse"]:"");
 		$this->profiler_reason=(isset($tmp["UMprofilerReason"])?$tmp["UMprofilerReason"]:"");
 		$this->cardref=(isset($tmp["UMcardRef"])?$tmp["UMcardRef"]:"");
+		$this->isduplicate=(isset($tmp["UMisDuplicate"])?$tmp["UMisDuplicate"]:"");
 		
 		// Obsolete variable (for backward compatibility) At some point they will no longer be set.
 		//$this->avs=(isset($tmp["UMavsResult"])?$tmp["UMavsResult"]:"");
@@ -578,7 +579,7 @@ class umTransaction {
 			$this->errorcode=999;
 			return false;
 		}
-		
+
 		// generate random seed value
 		$seed = microtime(true) . rand();
 		
@@ -673,8 +674,8 @@ class umTransaction {
 			$this->errorcode=10129;
 			return false;
 		}
-		
-				// Create hash if pin has been set.
+
+		// Create hash if pin has been set.
 		if(!trim($this->pin))
 		{
 			$this->result="Error";
